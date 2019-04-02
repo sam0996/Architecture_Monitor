@@ -1,0 +1,19 @@
+{
+  "name": "4471arch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ServiceMonitor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sam0996/Architecture_Monitor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sam0996/Architecture_Monitor/issues"
+  },
+  "homepage": "https://github.com/sam0996/Architecture_Monitor#readme"
+}
