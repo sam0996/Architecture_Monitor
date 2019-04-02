@@ -12,34 +12,33 @@ const db = admin.firestore();
 const services = db.collection('services');
 
 async function checkServices() {
-  const stocks = false;
-  const currency = false;
-  const news = false;
+  let stocksStatus = false;
+  let currencyStatus = false;
+  let newsStatus = false;
 
   try {
-    const result = await axios.get(process.env.STOCKS_URL);
-    console.log(result.status);
-    stocks = true;
+    await axios.get(process.env.STOCKS_URL);
+    stocksStatus = true;
   } catch (error) {
-    console.log(error.response.status);
-    stocks = false;
+    stocksStatus = false;
   }
   try {
-    const result = await axios.get(process.env.STOCKS_URL);
-    console.log(result.status);
-    stocks = true;
+    await axios.get(process.env.CURRENCY_URL);
+    currencyStatus = true;
   } catch (error) {
-    console.log(error.response.status);
-    stocks = false;
+    currencyStatus = false;
   }
   try {
-    const result = await axios.get(process.env.STOCKS_URL);
-    console.log(result.status);
-    stocks = true;
+    await axios.get(process.env.NEWS_URL);
+    newsStatus = true;
   } catch (error) {
-    console.log(error.response.status);
-    stocks = false;
+    newsStatus = false;
   }
+  services.doc(process.env.AVAILABLE_SERVICES_NAME).set({
+    stocks: stocksStatus,
+    currency: currencyStatus,
+    news: newsStatus,
+  });
 }
 
-setInterval(() => checkServices(services), process.env.TIMER);
+setInterval(checkServices, process.env.TIMER);
