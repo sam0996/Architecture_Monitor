@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
-
+const axios = require('axios');
+require('dotenv').config();
 const serviceAccount = require('./keys/serviceAccountKey.json');
 
 admin.initializeApp({
@@ -9,16 +10,36 @@ admin.initializeApp({
 const db = admin.firestore();
 
 const services = db.collection('services');
-const getAvailableService = services.doc('available_services');
-getAvailableService
-  .get()
-  .then((doc) => {
-    if (!doc.exists) {
-      console.log('No such document!');
-    } else {
-      console.log('Document data:', doc.data());
-    }
-  })
-  .catch((err) => {
-    console.log('Error getting document', err);
-  });
+
+async function checkServices() {
+  const stocks = false;
+  const currency = false;
+  const news = false;
+
+  try {
+    const result = await axios.get(process.env.STOCKS_URL);
+    console.log(result.status);
+    stocks = true;
+  } catch (error) {
+    console.log(error.response.status);
+    stocks = false;
+  }
+  try {
+    const result = await axios.get(process.env.STOCKS_URL);
+    console.log(result.status);
+    stocks = true;
+  } catch (error) {
+    console.log(error.response.status);
+    stocks = false;
+  }
+  try {
+    const result = await axios.get(process.env.STOCKS_URL);
+    console.log(result.status);
+    stocks = true;
+  } catch (error) {
+    console.log(error.response.status);
+    stocks = false;
+  }
+}
+
+setInterval(() => checkServices(services), process.env.TIMER);
