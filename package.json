@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/sam0996/Architecture_Monitor/issues"
   },
-  "homepage": "https://github.com/sam0996/Architecture_Monitor#readme"
+  "homepage": "https://github.com/sam0996/Architecture_Monitor#readme",
+  "dependencies": {
+    "firebase-admin": "^7.2.0"
+  }
 }
