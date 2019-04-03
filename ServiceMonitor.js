@@ -1,5 +1,8 @@
 const admin = require('firebase-admin');
 const axios = require('axios');
+const express = require('express');
+
+const app = express();
 require('dotenv').config();
 const serviceAccount = require('./keys/serviceAccountKey.json');
 
@@ -42,3 +45,9 @@ async function checkServices() {
 }
 
 setInterval(checkServices, process.env.TIMER);
+
+app.get('/heartbeat', (req, res) => {
+  res.sendStatus(200);
+});
+
+app.listen(process.env.PORT || 3000, () => console.log(`Currency service running on port ${port}!`));
