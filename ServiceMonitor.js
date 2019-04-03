@@ -50,4 +50,4 @@ app.get('/heartbeat', (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(process.env.PORT || 3000, () => console.log(`Currency service running on port ${port}!`));
+app.listen(process.env.PORT || 3000, () => console.log(`Currency service running on port ${process.env.PORT}!`));
