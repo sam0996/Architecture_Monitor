@@ -14,8 +14,8 @@ test('calls service that does not exist', async () => {
 test('get services', async () => {
   expect(await ServiceMonitor.getServices(process.env.AVAILABLE_SERVICES_NAME)).toEqual([
     {
-      currency: false,
-      news: false,
+      currency: true,
+      news: true,
       stocks: true,
     },
   ]);
