@@ -16,11 +16,24 @@ test('get services', async () => {
     {
       currency: false,
       news: false,
-      stocks: false,
+      stocks: true,
     },
   ]);
 });
 
 test('attempt to get from document that does not exist', async () => {
   expect(await ServiceMonitor.getServices('false')).toEqual([]);
+});
+
+test('get all documents in collection', async () => {
+  expect(await ServiceMonitor.getDocuments('services')).toContain(
+    'available_services',
+    'currency',
+    'stocks',
+    'news',
+  );
+});
+
+test('attempt to get documents from collection that does not exist', async () => {
+  expect(await ServiceMonitor.getDocuments('false')).toEqual([]);
 });

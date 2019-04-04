@@ -36,6 +36,23 @@ async function checkServices() {
   });
 }
 
+async function getDocuments(collectionName) {
+  const collectionList = [];
+  const collectionRef = db.collection(collectionName);
+  await collectionRef
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        console.log(doc.id);
+        collectionList.push(doc.id);
+      });
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+  return collectionList;
+}
+
 async function getServices(documentName) {
   const servicesList = [];
 
@@ -60,4 +77,5 @@ module.exports = {
   checkService,
   checkServices,
   getServices,
+  getDocuments,
 };
