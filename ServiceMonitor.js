@@ -1,8 +1,5 @@
 const admin = require('firebase-admin');
 const axios = require('axios');
-const express = require('express');
-
-const app = express();
 require('dotenv').config();
 const serviceAccount = require('./keys/serviceAccountKey.json');
 
@@ -14,29 +11,24 @@ const db = admin.firestore();
 
 const services = db.collection('services');
 
-async function checkServices() {
-  let stocksStatus = false;
-  let currencyStatus = false;
-  let newsStatus = false;
+async function checkService(serviceName) {
+  let serviceStatus = false;
+  try {
+    await axios.get(serviceName);
+    serviceStatus = true;
+  } catch (error) {
+    serviceStatus = false;
+  }
+  return serviceStatus;
+}
 
-  try {
-    await axios.get(process.env.STOCKS_URL);
-    stocksStatus = true;
-  } catch (error) {
-    stocksStatus = false;
-  }
-  try {
-    await axios.get(process.env.CURRENCY_URL);
-    currencyStatus = true;
-  } catch (error) {
-    currencyStatus = false;
-  }
-  try {
-    await axios.get(process.env.NEWS_URL);
-    newsStatus = true;
-  } catch (error) {
-    newsStatus = false;
-  }
+async function checkServices() {
+  const [stocksStatus, currencyStatus, newsStatus] = await Promise.all([
+    checkService(process.env.STOCKS_URL),
+    checkService(process.env.CURRENCY_URL),
+    checkService(process.env.NEWS_URL),
+  ]);
+
   services.doc(process.env.AVAILABLE_SERVICES_NAME).set({
     stocks: stocksStatus,
     currency: currencyStatus,
@@ -44,10 +36,28 @@ async function checkServices() {
   });
 }
 
-setInterval(checkServices, process.env.TIMER);
+async function getServices(documentName) {
+  const servicesList = [];
 
-app.get('/heartbeat', (req, res) => {
-  res.sendStatus(200);
-});
+  await services
+    .doc(documentName)
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        console.log('Document data:', doc.data());
+        servicesList.push(doc.data());
+      }
+    })
+    .catch((err) => {
+      console.log('Error getting document', err);
+    });
+  return servicesList;
+}
 
-app.listen(process.env.PORT || 3000, () => console.log(`Currency service running on port ${process.env.PORT}!`));
+module.exports = {
+  checkService,
+  checkServices,
+  getServices,
+};
